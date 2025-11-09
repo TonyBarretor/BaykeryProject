@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { Header } from '@/components/header';
+import { Toaster } from 'sonner';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -42,7 +44,9 @@ export default function RootLayout({
   return (
     <html lang="es-PE" suppressHydrationWarning>
       <body className={cn(inter.variable, playfair.variable, 'antialiased')}>
+        <Header />
         {children}
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );
