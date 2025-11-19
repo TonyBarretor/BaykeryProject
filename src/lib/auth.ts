@@ -30,13 +30,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/auth/error',
   },
   providers: [
-    EmailProvider({
-      from: process.env.EMAIL_FROM || 'noreply@baykery.pe',
-      sendVerificationRequest: async ({ identifier: email, url }) => {
-        // TODO: Implement email sending with Resend
-        console.log(`Magic link for ${email}: ${url}`);
-      },
-    }),
+    // Only enable EmailProvider if RESEND_API_KEY is configured
+    ...(process.env.RESEND_API_KEY
+      ? [
+          EmailProvider({
+            from: process.env.EMAIL_FROM || 'noreply@baykery.pe',
+            server: {
+              host: 'smtp.resend.com',
+              port: 465,
+              secure: true,
+              auth: {
+                user: 'resend',
+                pass: process.env.RESEND_API_KEY,
+              },
+            },
+          }),
+        ]
+      : []),
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
       ? [
           GoogleProvider({
