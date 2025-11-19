@@ -356,6 +356,47 @@ npx prisma db pull
    npx tsc --noEmit
    ```
 
+### Environment Variable Conflicts
+
+**Symptom**: Vercel deployment fails due to environment variable conflicts
+
+**Solutions**:
+1. **Remove `vercel.json` environment variables**
+   - If you have a `vercel.json` file with `env` section, DELETE it
+   - Vercel environment variables should ONLY be set in the Vercel dashboard
+   - Keeping env vars in both places causes conflicts and build failures
+
+   ```bash
+   # If you have vercel.json, remove the env section or delete the file
+   rm vercel.json
+   ```
+
+2. **Set all environment variables in Vercel dashboard only**
+   - Go to Project → Settings → Environment Variables
+   - Add each variable individually for Production, Preview, and Development
+
+### Nodemailer Dependency Warnings
+
+**Symptom**: npm warnings about nodemailer peer dependency mismatch
+
+```
+npm warn peerOptional nodemailer@"^6.8.0" from @auth/core@0.41.0
+npm warn Conflicting peer dependency: nodemailer@6.10.1
+```
+
+**Solution**: This is a peer dependency warning from NextAuth and can be safely ignored. However, if you want to resolve it:
+
+```bash
+# The project uses nodemailer@7.0.10 which is newer than the peer dependency request
+# NextAuth's @auth/core requests nodemailer@^6.8.0 but works fine with v7
+# No action needed - this is a warning, not an error
+```
+
+If email functionality doesn't work, verify:
+1. `RESEND_API_KEY` is set in Vercel
+2. `EMAIL_FROM` matches your verified Resend domain
+3. Check Resend dashboard for delivery logs
+
 ### NextAuth Errors
 
 **Symptom**: `[next-auth][error][SIGNIN_EMAIL_ERROR]`
