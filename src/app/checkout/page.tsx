@@ -26,7 +26,7 @@ const checkoutSchema = z.object({
   deliveryWindow: z.enum(['MORNING', 'AFTERNOON']),
   zoneId: z.string().min(1, 'Zona de entrega requerida'),
   couponCode: z.string().optional(),
-  tipPEN: z.number().min(0).default(0),
+  tipPEN: z.number().min(0),
 });
 
 type CheckoutForm = z.infer<typeof checkoutSchema>;
