@@ -67,7 +67,7 @@ export const checkoutSchema = z.object({
   zoneId: z.string(),
   items: z.array(orderItemSchema).min(1),
   couponCode: z.string().optional(),
-  tipPEN: z.number().min(0).optional().default(0),
+  tipPEN: z.number().min(0).default(0),
 }).refine((data) => {
   // Validate delivery date is a weekend
   const day = data.deliveryDate.getDay();
