@@ -56,7 +56,7 @@ export default async function AdminOrdersPage() {
         </div>
 
         <div className="space-y-4">
-          {orders.map((order) => (
+          {orders.map((order: any) => (
             <Card key={order.id}>
               <CardContent className="p-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -95,7 +95,7 @@ export default async function AdminOrdersPage() {
                   <div className="mt-4 border-t pt-4">
                     <p className="mb-2 text-sm font-semibold">Productos:</p>
                     <div className="space-y-1">
-                      {order.items.map((item) => (
+                      {order.items.map((item: any) => (
                         <p key={item.id} className="text-sm text-muted-foreground">
                           {item.quantity}x {item.nameSnapshot} - {formatPrice(parseFloat(item.priceSnapshotPEN.toString()))}
                         </p>

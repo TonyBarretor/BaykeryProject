@@ -68,7 +68,7 @@ export default async function ProductsPage({
               Todos
             </Button>
           </Link>
-          {categories.map((category) => (
+          {categories.map((category: any) => (
             <Link key={category.id} href={`/productos?category=${category.slug}`}>
               <Button
                 variant={searchParams.category === category.slug ? 'default' : 'outline'}
@@ -87,7 +87,7 @@ export default async function ProductsPage({
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((product) => (
+            {products.map((product: any) => (
               <Link key={product.id} href={`/productos/${product.slug}`}>
                 <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg">
                   <CardHeader className="p-0">

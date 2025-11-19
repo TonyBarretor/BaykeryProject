@@ -7,7 +7,7 @@ import { useCart, type CartItem } from '@/lib/cart-store';
 import { toast } from 'sonner';
 
 interface AddToCartButtonProps {
-  product: CartItem;
+  product: Omit<CartItem, 'quantity'>;
   disabled?: boolean;
 }
 

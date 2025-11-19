@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 
     // Check stock availability
     for (const item of validatedData.items) {
-      const product = products.find((p) => p.id === item.productId);
+      const product = products.find((p: any) => p.id === item.productId);
       if (!product) {
         return NextResponse.json(
           { error: `Producto ${item.productId} no encontrado` },
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     // Calculate totals
     let subtotalPEN = 0;
     const orderItems = validatedData.items.map((item) => {
-      const product = products.find((p) => p.id === item.productId)!;
+      const product = products.find((p: any) => p.id === item.productId)!;
       const itemTotal = parseFloat(product.pricePEN.toString()) * item.quantity;
       subtotalPEN += itemTotal;
 
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
     const totalPEN = subtotalPEN + deliveryFeePEN - discountPEN + validatedData.tipPEN;
 
     // Create order (start transaction)
-    const order = await prisma.$transaction(async (tx) => {
+    const order = await prisma.$transaction(async (tx: any) => {
       // Decrement product stock
       for (const item of validatedData.items) {
         await tx.product.update({

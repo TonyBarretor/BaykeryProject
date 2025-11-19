@@ -83,7 +83,7 @@ export default async function ProductDetailPage({
             {/* Thumbnail Gallery */}
             {product.images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
-                {product.images.map((image, index) => (
+                {product.images.map((image: string, index: number) => (
                   <div
                     key={index}
                     className="relative aspect-square overflow-hidden rounded-md bg-muted"
@@ -160,7 +160,7 @@ export default async function ProductDetailPage({
             {/* Tags */}
             {product.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {product.tags.map((tag) => (
+                {product.tags.map((tag: string) => (
                   <span
                     key={tag}
                     className="rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground"

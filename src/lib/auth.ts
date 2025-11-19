@@ -3,7 +3,8 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import EmailProvider from 'next-auth/providers/email';
 import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from '@/lib/prisma';
-import type { UserRole } from '@prisma/client';
+// Define UserRole locally since Prisma Client might not be generated yet
+type UserRole = 'CUSTOMER' | 'ADMIN';
 
 declare module 'next-auth' {
   interface Session {
@@ -19,7 +20,7 @@ declare module 'next-auth' {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as any,
   session: {
     strategy: 'jwt',
   },

@@ -1,5 +1,36 @@
 import { z } from 'zod';
-import { ProductStatus, OrderStatus, PaymentProvider, DeliveryWindow, CouponType } from '@prisma/client';
+
+// Define enums locally since Prisma Client might not be generated yet
+const ProductStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED',
+} as const;
+
+const OrderStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  PROCESSING: 'PROCESSING',
+  READY: 'READY',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+const PaymentProvider = {
+  CULQI: 'CULQI',
+  MERCADOPAGO: 'MERCADOPAGO',
+} as const;
+
+const DeliveryWindow = {
+  MORNING: 'MORNING',
+  AFTERNOON: 'AFTERNOON',
+} as const;
+
+const CouponType = {
+  PERCENTAGE: 'PERCENTAGE',
+  FIXED: 'FIXED',
+} as const;
 
 // Product validation
 export const productSchema = z.object({
@@ -8,7 +39,7 @@ export const productSchema = z.object({
   description: z.string().optional(),
   pricePEN: z.coerce.number().positive(),
   costPEN: z.coerce.number().positive().optional(),
-  status: z.nativeEnum(ProductStatus),
+  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
   weekendOnly: z.boolean().default(true),
   allergens: z.array(z.string()),
   tags: z.array(z.string()),
@@ -63,7 +94,7 @@ export const checkoutSchema = z.object({
   district: z.string().min(1),
   notes: z.string().optional(),
   deliveryDate: z.coerce.date(),
-  deliveryWindow: z.nativeEnum(DeliveryWindow),
+  deliveryWindow: z.enum(['MORNING', 'AFTERNOON']),
   zoneId: z.string(),
   items: z.array(orderItemSchema).min(1),
   couponCode: z.string().optional(),
@@ -89,7 +120,7 @@ export const checkoutSchema = z.object({
 // Coupon validation
 export const couponSchema = z.object({
   code: z.string().min(1).max(50).toUpperCase(),
-  type: z.nativeEnum(CouponType),
+  type: z.enum(['PERCENTAGE', 'FIXED']),
   value: z.coerce.number().positive(),
   minSubtotalPEN: z.coerce.number().min(0).optional(),
   maxDiscountPEN: z.coerce.number().min(0).optional(),

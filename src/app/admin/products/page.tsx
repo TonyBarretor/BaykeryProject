@@ -36,7 +36,7 @@ export default async function AdminProductsPage() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => (
+          {products.map((product: any) => (
             <Link key={product.id} href={`/admin/products/${product.id}`}>
               <Card className="group overflow-hidden transition-shadow hover:shadow-lg">
                 <div className="relative aspect-square bg-muted">
