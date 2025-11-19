@@ -81,19 +81,28 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     }
 
     // Update product
-    const product = await prisma.product.update({
-      where: { slug },
-      data: validatedData,
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
+    // destructure categoryId out of the validated data
+  const { categoryId, ...rest } = validatedData
+
+const product = await prisma.product.update({
+  where: { slug },
+  data: {
+    ...rest,
+    ...(categoryId
+      ? {
+          category: {
+            connect: { id: categoryId },
           },
-        },
-      },
-    });
+        }
+      : {}),
+  },
+  include: {
+    category: {
+      select: { id: true, name: true },
+    },
+  },
+})
+
 
     return NextResponse.json(product);
   } catch (error) {
