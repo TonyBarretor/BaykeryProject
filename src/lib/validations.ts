@@ -16,7 +16,7 @@ export const productSchema = z.object({
   stock: z.coerce.number().int().min(0),
   sku: z.string().optional(),
   weight: z.coerce.number().int().positive().optional(),
-  nutrition: z.record(z.any()).optional(),
+  nutrition: z.any().optional(),
   categoryId: z.string().optional(),
   featured: z.boolean().default(false),
 });
