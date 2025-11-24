@@ -89,6 +89,8 @@ export default function CheckoutPage() {
   }, [deliveryDate, setValue]);
 
   const onSubmit = async (data: CheckoutForm) => {
+    console.log('Form submitted with data:', data);
+
     if (!deliveryDate) {
       toast.error('Por favor selecciona una fecha de entrega');
       return;
@@ -102,6 +104,8 @@ export default function CheckoutPage() {
         quantity: item.quantity,
       }));
 
+      console.log('Sending checkout request...');
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
@@ -113,18 +117,30 @@ export default function CheckoutPage() {
         }),
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
         const error = await response.json();
+        console.error('API error:', error);
         throw new Error(error.error || 'Error al procesar el pedido');
       }
 
       const order = await response.json();
+      console.log('Order created:', order);
+
+      if (!order.orderNumber) {
+        console.error('Order missing orderNumber:', order);
+        throw new Error('Orden creada pero falta el número de pedido');
+      }
 
       // Clear cart
       clearCart();
 
-      // Redirect to order confirmation
+      // Show success message
       toast.success('¡Pedido creado exitosamente!');
+
+      // Redirect to order confirmation
+      console.log('Redirecting to:', `/orden/${order.orderNumber}`);
       router.push(`/orden/${order.orderNumber}`);
     } catch (error) {
       console.error('Checkout error:', error);
@@ -143,7 +159,29 @@ export default function CheckoutPage() {
       <div className="container">
         <h1 className="mb-8 font-serif text-3xl font-bold md:text-4xl">Finalizar Pedido</h1>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={(e) => {
+            console.log('Form submit event triggered');
+            console.log('Delivery date:', deliveryDate);
+            console.log('Form errors:', errors);
+            handleSubmit(onSubmit)(e);
+          }}
+          noValidate
+        >
+          {/* Form Errors Display */}
+          {Object.keys(errors).length > 0 && (
+            <div className="mb-6 rounded-lg border-2 border-red-500 bg-red-50 p-4">
+              <h3 className="font-semibold text-red-700 mb-2">Por favor corrige los siguientes errores:</h3>
+              <ul className="list-disc list-inside text-sm text-red-600 space-y-1">
+                {Object.entries(errors).map(([key, error]) => (
+                  <li key={key}>
+                    <strong>{key}:</strong> {error?.message as string}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="grid gap-8 lg:grid-cols-3">
             {/* Checkout Form */}
             <div className="lg:col-span-2 space-y-6">
