@@ -1,6 +1,12 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialize Resend client only when needed
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    return null;
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 interface OrderEmailData {
   orderNumber: string;
@@ -27,6 +33,11 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
   }
 
   try {
+    const resend = getResendClient();
+    if (!resend) {
+      return { success: false, reason: 'not_configured' };
+    }
+
     const itemsList = data.items
       .map((item) => `- ${item.quantity}x ${item.name} (${item.price})`)
       .join('\n');
@@ -136,6 +147,11 @@ export async function sendOrderStatusEmail(
   }
 
   try {
+    const resend = getResendClient();
+    if (!resend) {
+      return { success: false, reason: 'not_configured' };
+    }
+
     const statusEmoji = {
       PAID: '✅',
       PROCESSING: '👨‍🍳',
