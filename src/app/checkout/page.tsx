@@ -317,18 +317,17 @@ export default function CheckoutPage() {
                       </div>
                     </label>
 
-                    <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50 opacity-60">
+                    <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="card"
-                        disabled
                         className="mt-1 h-4 w-4"
                       />
                       <div className="flex-1">
                         <div className="font-semibold">Tarjeta de Crédito/Débito</div>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          Paga con Visa, Mastercard, Yape (Próximamente)
+                          Paga con Visa, Mastercard, Yape
                         </p>
                       </div>
                     </label>

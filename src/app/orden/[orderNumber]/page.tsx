@@ -41,6 +41,19 @@ export default async function OrderConfirmationPage({
           </p>
         </div>
 
+        {/* Success Banner */}
+        <div className="mb-6 rounded-lg border-2 border-green-500 bg-green-50 p-6 text-center">
+          <div className="flex items-center justify-center gap-2 text-green-700">
+            <Mail className="h-5 w-5" />
+            <p className="text-lg font-semibold">
+              ¡Tu compra fue exitosa!
+            </p>
+          </div>
+          <p className="mt-2 text-sm text-green-600">
+            Te hemos enviado un email de confirmación a <strong>{order.email}</strong> con todos los detalles de tu pedido.
+          </p>
+        </div>
+
         {/* Order Number */}
         <Card className="mb-6">
           <CardHeader>
