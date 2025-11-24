@@ -220,7 +220,7 @@ export async function POST(request: NextRequest) {
       orderTotal: formatPrice(parseFloat(order.totalPEN.toString())),
       deliveryDate: formatDate(order.deliveryDate),
       deliveryWindow: order.deliveryWindow,
-      items: order.items.map((item) => ({
+      items: order.items.map((item: any) => ({
         name: item.nameSnapshot,
         quantity: item.quantity,
         price: formatPrice(parseFloat(item.priceSnapshotPEN.toString())),
