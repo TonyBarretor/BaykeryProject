@@ -10,7 +10,7 @@ export default async function AdminDashboardPage() {
   const session = await auth();
 
   if (!session || session.user.role !== 'ADMIN') {
-    redirect('/');
+    redirect('/auth/signin?callbackUrl=/admin');
   }
 
   // Fetch statistics

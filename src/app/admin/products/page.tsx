@@ -11,7 +11,7 @@ export default async function AdminProductsPage() {
   const session = await auth();
 
   if (!session || session.user.role !== 'ADMIN') {
-    redirect('/');
+    redirect('/auth/signin?callbackUrl=/admin/products');
   }
 
   const products = await prisma.product.findMany({

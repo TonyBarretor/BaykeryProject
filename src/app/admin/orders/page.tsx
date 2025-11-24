@@ -10,7 +10,7 @@ export default async function AdminOrdersPage() {
   const session = await auth();
 
   if (!session || session.user.role !== 'ADMIN') {
-    redirect('/');
+    redirect('/auth/signin?callbackUrl=/admin/orders');
   }
 
   const orders = await prisma.order.findMany({
