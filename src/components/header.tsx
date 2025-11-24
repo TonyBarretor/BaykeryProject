@@ -42,11 +42,6 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <Link href="/admin">
-            <Button variant="ghost" size="sm">
-              Admin
-            </Button>
-          </Link>
           <CartDrawer />
         </div>
       </div>
