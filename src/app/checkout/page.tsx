@@ -38,6 +38,7 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deliveryDate, setDeliveryDate] = useState<Date>();
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
   const {
     register,
@@ -61,6 +62,11 @@ export default function CheckoutPage() {
   const total = subtotal + deliveryFee + tip;
 
   useEffect(() => {
+    // Don't redirect if checkout was successful
+    if (checkoutSuccess) {
+      return;
+    }
+
     // Redirect if cart is empty
     if (items.length === 0) {
       router.push('/productos');
@@ -80,7 +86,7 @@ export default function CheckoutPage() {
         console.error('Error fetching zones:', error);
         toast.error('Error al cargar zonas de entrega');
       });
-  }, [items, router, setValue]);
+  }, [items, router, setValue, checkoutSuccess]);
 
   useEffect(() => {
     if (deliveryDate) {
@@ -132,6 +138,9 @@ export default function CheckoutPage() {
         console.error('Order missing orderNumber:', order);
         throw new Error('Orden creada pero falta el número de pedido');
       }
+
+      // Mark checkout as successful to prevent redirect to products page
+      setCheckoutSuccess(true);
 
       // Clear cart
       clearCart();
