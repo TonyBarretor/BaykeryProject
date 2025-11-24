@@ -118,7 +118,7 @@ export default async function OrderConfirmationPage({
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {order.items.map((item) => (
+              {order.items.map((item: any) => (
                 <div key={item.id} className="flex items-center justify-between border-b pb-4 last:border-0">
                   <div className="flex-1">
                     <p className="font-semibold">{item.nameSnapshot}</p>
