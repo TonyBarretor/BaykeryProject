@@ -37,6 +37,7 @@ export default function CheckoutPage() {
   const [zones, setZones] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deliveryDate, setDeliveryDate] = useState<Date>();
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
 
   const {
     register,
@@ -301,12 +302,13 @@ export default function CheckoutPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50">
+                    <label className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50 ${paymentMethod === 'cash' ? 'border-primary bg-primary/5' : ''}`}>
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="cash"
-                        defaultChecked
+                        checked={paymentMethod === 'cash'}
+                        onChange={(e) => setPaymentMethod('cash')}
                         className="mt-1 h-4 w-4"
                       />
                       <div className="flex-1">
@@ -317,11 +319,13 @@ export default function CheckoutPage() {
                       </div>
                     </label>
 
-                    <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50">
+                    <label className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50 ${paymentMethod === 'card' ? 'border-primary bg-primary/5' : ''}`}>
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="card"
+                        checked={paymentMethod === 'card'}
+                        onChange={(e) => setPaymentMethod('card')}
                         className="mt-1 h-4 w-4"
                       />
                       <div className="flex-1">
@@ -332,6 +336,61 @@ export default function CheckoutPage() {
                       </div>
                     </label>
                   </div>
+
+                  {/* Credit Card Form */}
+                  {paymentMethod === 'card' && (
+                    <div className="mt-4 space-y-4 rounded-lg border border-primary/20 bg-primary/5 p-4">
+                      <h3 className="font-semibold text-sm">Información de la Tarjeta</h3>
+
+                      <div>
+                        <Label htmlFor="cardNumber">Número de Tarjeta</Label>
+                        <Input
+                          id="cardNumber"
+                          type="text"
+                          placeholder="1234 5678 9012 3456"
+                          maxLength={19}
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="cardName">Nombre en la Tarjeta</Label>
+                        <Input
+                          id="cardName"
+                          type="text"
+                          placeholder="JUAN PEREZ"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="cardExpiry">Fecha de Vencimiento</Label>
+                          <Input
+                            id="cardExpiry"
+                            type="text"
+                            placeholder="MM/AA"
+                            maxLength={5}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="cardCvv">CVV</Label>
+                          <Input
+                            id="cardCvv"
+                            type="text"
+                            placeholder="123"
+                            maxLength={4}
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="rounded bg-blue-50 p-3 text-xs text-blue-700">
+                        🔒 Tu información está segura y encriptada
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mt-4 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
                     💡 <strong>Nota:</strong> Tu pedido se confirmará una vez que nuestro equipo lo revise. Te contactaremos para confirmar la entrega.
