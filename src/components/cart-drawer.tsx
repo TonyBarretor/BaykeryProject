@@ -3,6 +3,7 @@
 import { ShoppingCart, Plus, Minus, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -17,11 +18,12 @@ import { formatPrice } from '@/lib/utils';
 
 export function CartDrawer() {
   const { items, removeItem, updateQuantity, getTotalItems, getTotalPrice } = useCart();
+  const [open, setOpen] = useState(false);
   const totalItems = getTotalItems();
   const totalPrice = getTotalPrice();
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
           <ShoppingCart className="h-5 w-5" />
@@ -121,7 +123,7 @@ export function CartDrawer() {
                 <span className="text-lg font-semibold">Total</span>
                 <span className="text-2xl font-bold text-primary">{formatPrice(totalPrice)}</span>
               </div>
-              <Link href="/checkout" className="w-full">
+              <Link href="/checkout" className="w-full" onClick={() => setOpen(false)}>
                 <Button size="lg" className="w-full">
                   Proceder al Pago
                 </Button>

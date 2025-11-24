@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { checkoutSchema } from '@/lib/validations';
-import { generateOrderNumber, isWeekend } from '@/lib/utils';
+import { generateOrderNumber, isWeekend, formatPrice, formatDate } from '@/lib/utils';
+import { sendOrderConfirmationEmail } from '@/lib/email';
 
 // POST /api/checkout - Create order draft and validate cart
 export async function POST(request: NextRequest) {
@@ -209,6 +210,24 @@ export async function POST(request: NextRequest) {
           zone: true,
         },
       });
+    });
+
+    // Send order confirmation email (non-blocking)
+    sendOrderConfirmationEmail({
+      orderNumber: order.orderNumber,
+      customerName: order.name,
+      customerEmail: order.email,
+      orderTotal: formatPrice(parseFloat(order.totalPEN.toString())),
+      deliveryDate: formatDate(order.deliveryDate),
+      deliveryWindow: order.deliveryWindow,
+      items: order.items.map((item) => ({
+        name: item.nameSnapshot,
+        quantity: item.quantity,
+        price: formatPrice(parseFloat(item.priceSnapshotPEN.toString())),
+      })),
+    }).catch((error) => {
+      // Log error but don't fail the order creation
+      console.error('Failed to send confirmation email:', error);
     });
 
     return NextResponse.json(order, { status: 201 });
